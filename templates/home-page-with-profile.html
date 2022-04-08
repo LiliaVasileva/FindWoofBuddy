@@ -1,0 +1,31 @@
+{% extends 'base/index.html' %}
+{% load static %}
+{% block content %}
+    <div id="portfolio">
+        <h2 class="text-center mt-0">Woof of The Month!</h2>
+        <div class="container-fluid p-3">
+            <div class="row g-3">
+                <div class="col-lg-4 col-sm-6">
+                    <img class="img-fluid" src="{% static 'images/IMG_2368_jpg.jpeg' %}" alt="..."/>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <img class="img-fluid" src="{% static 'images/IMG_5340.jpeg' %}" alt="..."/>
+                     <button href="#" class="btn btn-light mx-1">VIEW DETAILS</button>
+                </div>
+                <div class="col-lg-4 col-sm-6 mx-1">
+                    <div class="card" style="width: 13rem;">
+                        <img src="{% static 'images/IMG_6717_jpg.jpeg' %}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk
+                                of the card's content.</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+{#                    <img class="img-fluid" src="{% static 'images/IMG_6717_jpg.jpeg' %}" alt="..."/>#}
+{#                    <h4> Hi, I'm Buddy!</h4>#}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

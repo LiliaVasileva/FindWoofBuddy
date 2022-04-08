@@ -1,0 +1,30 @@
+{% extends 'base/index.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h2 class="text-center text-dark mt-5">Hi,{{ object.full_name }}</h2>
+                <div class="card my-5">
+
+                    <form class="card-body cardbody-color p-lg-5 uniForm mx-5 form" method="post">
+                        <div class="text-center">
+                            <img src="https://www.nicepng.com/png/detail/96-961832_clip-art-dog-head.png"
+                                 class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3"
+                                 width="200px" alt="profile">
+                        </div>
+                        {{ form.as_p }}
+                        {% csrf_token %}
+                        <p>
+                            <button type="submit" class="btn btn-light mx-1">UPDATE</button>
+                            <button type="submit" class="btn btn-light mx-1">DELETE</button>
+                            <button type="submit" class="btn btn-light mx-1"><a href="{% url 'profile logout' %}" style="text-decoration:none;"> LOGOUT </a></button>
+                        </p>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
