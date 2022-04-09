@@ -1,10 +1,12 @@
 import os
 from pathlib import Path
+import environ
+from decouple import config
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-$buw$)u$ps*uw=8n5=%dwc2)b&!qkx(^w$9_q33fu2j7r!fnke'
-
+SECRET_KEY=config('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -37,8 +39,7 @@ ROOT_URLCONF = 'find_buddy.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -62,9 +63,9 @@ AUTH_USER_MODEL = 'home.FindBuddyUser'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'find_buddy_db',
-        'USER': 'postgres',
-        'PASSWORD': '1123QwER',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
@@ -101,8 +102,10 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
+
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'mediafiles'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -113,7 +116,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'find.buddy.woofs@gmail.com'
-EMAIL_HOST_PASSWORD = 'Georgi_PaSS01$$'
-SERVER_EMAIL = 'find.buddy.woofs@gmail.com'
-DEFAULT_FROM_EMAIL = 'find.buddy.woofs@gmail.com'
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+SERVER_EMAIL = config('SERVER_EMAIL')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
