@@ -1,6 +1,9 @@
 
 # Easier way to fix the visualization of the fields in form
 # creating mixin, to be inherited by the ProfileForm class
+from django.shortcuts import redirect
+
+
 class BootstrapFormMixin:
     fields = {}
 
@@ -26,3 +29,4 @@ class DisabledFieldsFormMixin:
             if not hasattr(field.widget, 'attrs'):
                 setattr(field.widget, 'attrs', {})
             field.widget.attrs['readonly'] = 'readonly'
+

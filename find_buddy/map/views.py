@@ -40,7 +40,7 @@ def show_map(request):
         'form': form,
         'nav_bar': nav_bar,
     }
-    return render(request, 'test_map.html', context)
+    return render(request, 'home-map.html', context)
 
 
 def show_users_addresses(request):

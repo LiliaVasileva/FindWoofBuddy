@@ -1,0 +1,26 @@
+{% extends 'base/index.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card my-5">
+                    <form class="card-body cardbody-color p-lg-5 uniForm mx-5 form" method="post"
+                          action="{% url 'dog delete' dog.pk %}"
+                          enctype="multipart/form-data">
+                        <div class="text-center">
+                            <p>
+                            <h3>Are you sure you want to delete {{ dog.name }}'s profile?</h3>
+                            {{ form }}
+                            {% csrf_token %}
+                            </p>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-light mx-1">YES</button>
+                            <a type="submit" class="btn btn-light mx-1" href="{% url 'dog details' %}">NO</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
