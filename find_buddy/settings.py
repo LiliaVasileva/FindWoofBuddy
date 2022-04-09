@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'find_buddy.map',
     'find_buddy.home',
     'crispy_forms',
+    'find_buddy.dog',
 
 ]
 
