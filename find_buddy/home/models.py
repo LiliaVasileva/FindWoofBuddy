@@ -1,6 +1,8 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
+
+from find_buddy.common.validators import validate_only_letters
 from find_buddy.home.managers import FindBuddyUserManager
 
 
@@ -26,9 +28,20 @@ class FindBuddyUser(AbstractBaseUser, PermissionsMixin):
 class Profile(models.Model):
     first_name = models.CharField(
         max_length=25,
+        validators=(
+            validate_only_letters,
+        )
     )
     last_name = models.CharField(
         max_length=30,
+        validators=(
+            validate_only_letters,
+        )
+    )
+
+    picture = models.ImageField(
+        blank=True,
+        null=True,
     )
 
     birth_date = models.DateField()
