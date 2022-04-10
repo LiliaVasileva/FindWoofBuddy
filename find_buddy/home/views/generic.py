@@ -16,6 +16,7 @@ class HomeTemplateView(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         m = def_my_map()
+        m = m._repr_html_()
         context = super().get_context_data(**kwargs)
         context['map'] = m
         return context
@@ -61,5 +62,6 @@ class ProfileHomeListView(ListView):
     template_name = 'home-page-with-profile.html'
     paginate_by = 2
     context_object_name = 'dogs'
+    ordering = ['if_lost']
 
 

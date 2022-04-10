@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import NON_FIELD_ERRORS
 
 from find_buddy.common.form_mixins import BootstrapFormMixin, DisabledFieldsFormMixin
-from find_buddy.dog.models import Dog
+from find_buddy.dog.models import Dog, DogMissingReport
 
 
 class DogCreateForm(BootstrapFormMixin, forms.ModelForm):
@@ -85,6 +85,36 @@ class DogDeleteForm(forms.ModelForm, DisabledFieldsFormMixin, BootstrapFormMixin
             'description': forms.Textarea(
                 attrs={
                     'rows': 3,
+                }
+            ),
+        }
+
+
+class DogMissingReportForm(forms.ModelForm, BootstrapFormMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_bootstrap_form_controls()
+
+    class Meta:
+        model = DogMissingReport
+        exclude= ['dog']
+        widgets = {
+            'reported_address': forms.Textarea(
+                attrs={
+                    'rows': 1,
+                    'placeholder': 'Woof last seen address',
+                }
+            ),
+            'subject': forms.Textarea(
+                attrs={
+                    'rows': 1,
+                    'placeholder': 'Email subject',
+                }
+            ),
+            'message': forms.Textarea(
+                attrs={
+                    'rows': 3,
+                    'placeholder': 'Email message to the owners nearby',
                 }
             ),
         }

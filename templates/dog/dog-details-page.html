@@ -1,0 +1,29 @@
+{% extends 'base/index.html' %}
+{% block content %}
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ dog.name }}</h5>
+                    {% if not dog.picture %}
+                        <img src="https://www.nicepng.com/png/detail/96-961832_clip-art-dog-head.png"
+                             class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3"
+                             width="200px" alt="profile" enctype="multipart/form-data">
+                    {% else %}
+                        <img src="{{ dog.picture.url }}"
+                             class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3"
+                             width="200px" alt="profile">
+                    {% endif %}
+                    {% if dog.description %}
+                        <p class="card-text">{{ dog.description }}</p>
+                    {% endif %}
+                    {% if is_owner %}
+                        <a href="{% url 'dog edit' dog.pk %}" class="btn btn-primary">Edit</a>
+                        <a href="{% url 'dog delete' dog.pk %}" class="btn btn-primary">Delete</a>
+                        <a href="{% url 'dog missing report' dog.pk %}" class="btn btn-primary">Report Missing!</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
