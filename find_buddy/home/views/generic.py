@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.views.defaults import page_not_found
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, TemplateView, ListView
 
 from find_buddy.common.helpers import def_my_map
 from find_buddy.dog.models import Dog
@@ -37,17 +37,14 @@ class UserRegistrationView(CreateView):
     form_class = UserRegistrationForm
     template_name = 'register.html'
 
-
     # to login when register
     def form_valid(self, form):
         result = super().form_valid(form)
         login(self.request, self.object)
         return result
 
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return redirect('dashboard')
-        return super().dispatch(request, *args, **kwargs)
+    def get_success_url(self):
+        return reverse_lazy('dashboard')
 
 
 def logout_then_login(request):
@@ -59,16 +56,10 @@ def error_404(request):
     return render(request, 'page-404.html')
 
 
-class ProfileHomeTemplateView(TemplateView):
+class ProfileHomeListView(ListView):
+    model = Dog
     template_name = 'home-page-with-profile.html'
+    paginate_by = 2
+    context_object_name = 'dogs'
 
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
-        dogs = list(Dog.objects.all())
-        owners = list(Profile.objects.all())
 
-        context.update({
-            'dogs': dogs,
-            'owners': owners,
-        })
-        return context
