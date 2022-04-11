@@ -84,28 +84,27 @@ def dog_missing_report(request, pk):
     missing_dog.save()
     if request.method == 'POST':
         form = DogMissingReportForm(request.POST)
-        geolocator = Nominatim(user_agent='dog')
-        reported_address_ = form.cleaned_data.get('reported_address')
-        reported_address = geolocator.geocode(reported_address_)
-        reported_address_lat = reported_address.latitude
-        reported_address_long = reported_address.longitude
-        point_a = (reported_address_lat, reported_address_long)
-        recipient_list = []
-
-        for dog in Dog.objects.all():
-            dog_address = geolocator.geocode(dog.address)
-            dog_address_lat = dog_address.latitude
-            dog_address_long = dog_address.longitude
-            point_b = (dog_address_lat, dog_address_long)
-            distance = round(geodesic(point_a, point_b).km, 2)
-            if distance < SEARCHING_SURROUNDING_DISTANCE:
-                recipient_list.append(dog.user.email)
-        if recipient_list:
-            subject = form.cleaned_data.get('subject')
-            message = form.cleaned_data.get('message')
-            send_mail(subject, message, from_email=EMAIL_HOST_USER, recipient_list=recipient_list)
-        form.cleaned_data['dog'] = missing_dog.pk
         if form.is_valid():
+            geolocator = Nominatim(user_agent='dog')
+            reported_address_ = form.cleaned_data['reported_address']
+            reported_address = geolocator.geocode(reported_address_)
+            reported_address_lat = reported_address.latitude
+            reported_address_long = reported_address.longitude
+            point_a = (reported_address_lat, reported_address_long)
+            recipient_list = []
+
+            for dog in Dog.objects.all():
+                dog_address = geolocator.geocode(dog.address)
+                dog_address_lat = dog_address.latitude
+                dog_address_long = dog_address.longitude
+                point_b = (dog_address_lat, dog_address_long)
+                distance = round(geodesic(point_a, point_b).km, 2)
+                if distance < SEARCHING_SURROUNDING_DISTANCE:
+                    recipient_list.append(dog.user.email)
+            if recipient_list:
+                subject = form.cleaned_data['subject']
+                message = form.cleaned_data['message']
+                send_mail(subject, message, from_email=EMAIL_HOST_USER, recipient_list=recipient_list)
             form.save()
             return redirect('dashboard')
     else:

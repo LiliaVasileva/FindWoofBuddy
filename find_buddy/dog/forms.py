@@ -118,3 +118,15 @@ class DogMissingReportForm(forms.ModelForm, BootstrapFormMixin):
                 }
             ),
         }
+    #
+    # def save(self, commit=True):
+    #     user = super().save(commit=commit)
+    #     dog_missing_report = DogMissingReport(
+    #         reported_address=self.cleaned_data['reported_address'],
+    #         subject=self.cleaned_data['subject'],
+    #         message=self.cleaned_data['message'],
+    #         dog=user.dog.pk,
+    #     )
+    #     if commit:
+    #         dog_missing_report.save()
+    #     return user

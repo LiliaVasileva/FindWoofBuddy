@@ -28,16 +28,16 @@ class UserRegistrationForm(UserCreationForm,BootstrapFormMixin):
     def clean_first_name(self):
         return self.cleaned_data['first_name']
 
-    def save(self, commit=True):
-        user = super().save(commit=commit)
-        profile = Profile(
-            first_name=self.cleaned_data['first_name'],
-            last_name=self.cleaned_data['last_name'],
-            birth_date=self.cleaned_data['birth_date'],
-            user=user,
-        )
-        if commit:
-            profile.save()
-        return user
+    # def save(self, commit=True):
+    #     user = super().save(commit=commit)
+    #     profile = Profile(
+    #         first_name=self.cleaned_data['first_name'],
+    #         last_name=self.cleaned_data['last_name'],
+    #         birth_date=self.cleaned_data['birth_date'],
+    #         user=user,
+    #     )
+    #     if commit:
+    #         profile.save()
+    #     return user
 
 
