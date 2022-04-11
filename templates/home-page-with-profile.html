@@ -7,7 +7,12 @@
             <div class="col-sm-6">
                 <div class="card">
                     <div class="card-body">
+                        {% if dog.if_lost %}
+                        <h5 class="card-title" style="color: red">Missing dog!</h5>
                         <h5 class="card-title">{{ dog.user }}' s Woof - {{ dog.name }}</h5>
+                    {% else %}
+                     <h5 class="card-title">{{ dog.user }}' s Woof - {{ dog.name }}</h5>
+                    {% endif %}
                         {% if not dog.picture %}
                             <img src="https://www.nicepng.com/png/detail/96-961832_clip-art-dog-head.png"
                                  class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3"
@@ -46,7 +51,8 @@
             <li class="page-i tem">
                 {% if is_paginated %}
                     <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
-                    <li class="page-item"><a class="page-link" href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a></li>
+                    <li class="page-item"><a class="page-link"
+                                             href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a></li>
                     {% if page_obj.has_previous %}
                         <li class="page-item">
                             <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">

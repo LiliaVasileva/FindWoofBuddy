@@ -4,7 +4,12 @@
         <div class="col-sm-6">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">{{ dog.name }}</h5>
+                    {% if dog.if_lost %}
+                        <h5 class="card-title" style="color: red">Missing dog!</h5>
+                        <h5 class="card-title">{{ dog.name }}</h5>
+                    {% else %}
+                        <h5 class="card-title">{{ dog.name }}</h5>
+                    {% endif %}
                     {% if not dog.picture %}
                         <img src="https://www.nicepng.com/png/detail/96-961832_clip-art-dog-head.png"
                              class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3"

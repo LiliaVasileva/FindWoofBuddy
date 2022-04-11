@@ -62,6 +62,6 @@ class ProfileHomeListView(ListView):
     template_name = 'home-page-with-profile.html'
     paginate_by = 2
     context_object_name = 'dogs'
-    ordering = ['if_lost']
+    ordering = ['-if_lost']
 
 
