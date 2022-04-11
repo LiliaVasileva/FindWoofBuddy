@@ -28,6 +28,13 @@ class ProfileDitailViewTests(TestCase):
         'description': 'Some Text Here',
         'if_lost': 'False',
     }
+    VALID_DOG_DATA_2 = {
+        'name': 'Jerry',
+        'address': 'Varna, Bulgaria',
+        'picture': 'IMG_20220454090_121818.jpg',
+        'description': 'Some Text Here',
+        'if_lost': 'False',
+    }
 
     def __create_user(self, **credentials):
         return UserModel.objects.create(**credentials)
@@ -72,6 +79,8 @@ class ProfileDitailViewTests(TestCase):
     def test_when_user_has_dogs_shows_correct_dog(self):
         user, profile = self.__create_valid_user_and_profile()
         dog = Dog.objects.create(**self.VALID_DOG_DATA, user=user)
+        user_2 = UserModel.objects.create(**{'email': 'testov3@abv.bg', 'password': '1123QbBQw$E'})
+        dog_user_2 = Dog.objects.create(**VALID_DOG_DATA_2, user=user_2)
         response = self.client.get(reverse('show profile', kwargs={'pk': profile.pk}))
 
         self.assertEqual(str(dog), ''.join(response.context['dogs']))
