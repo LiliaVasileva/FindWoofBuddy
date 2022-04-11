@@ -13,7 +13,7 @@ class ProfileDitailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         dogs_list = Dog.objects.filter(user_id=self.object.user_id)
-        dogs = [str(dog.name) for dog in dogs_list]
+        dogs = ', '.join([str(dog.name) for dog in dogs_list])
 
         context.update({
             'dogs': dogs,

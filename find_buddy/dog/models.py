@@ -6,6 +6,7 @@ from find_buddy.common.validators import validate_only_letters
 UserModel = get_user_model()
 
 
+
 class Dog(models.Model):
     DOG_NAME_MAX_LEN = 80
     DOG_ADDRESS_MAX_LEN = 255
