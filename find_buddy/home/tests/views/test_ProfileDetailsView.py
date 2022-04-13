@@ -45,7 +45,7 @@ class ProfileDitailViewTests(TestCase):
         return user, profile
 
     def test_when_opening_not_existing_profile_expect_404(self):
-        response = self.client.get(reverse('show profile', kwargs={'pk': 1}))
+        response = self.client.get(reverse('show profile', kwargs={'pk': 7}))
         self.assertEqual(404, response.status_code)
 
     def test_when_all_valid_expect_correct_template(self):
@@ -80,7 +80,7 @@ class ProfileDitailViewTests(TestCase):
         user, profile = self.__create_valid_user_and_profile()
         dog = Dog.objects.create(**self.VALID_DOG_DATA, user=user)
         user_2 = UserModel.objects.create(**{'email': 'testov3@abv.bg', 'password': '1123QbBQw$E'})
-        dog_user_2 = Dog.objects.create(**VALID_DOG_DATA_2, user=user_2)
+        dog_user_2 = Dog.objects.create(**self.VALID_DOG_DATA_2, user=user_2)
         response = self.client.get(reverse('show profile', kwargs={'pk': profile.pk}))
 
         self.assertEqual(str(dog), ''.join(response.context['dogs']))

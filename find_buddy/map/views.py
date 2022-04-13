@@ -4,9 +4,10 @@ from geocoder import location
 from .forms import SearchForm
 from find_buddy.map.models import Search
 from ..common.helpers import def_my_map
-from ..dog.models import Dog
+from django.contrib.auth.decorators import login_required
 
 
+@login_required(login_url='profile login')
 def show_map(request):
     nav_bar = True
     if request.method == 'POST':

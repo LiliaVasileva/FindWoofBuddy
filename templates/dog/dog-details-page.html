@@ -25,7 +25,6 @@
                     {% if is_owner %}
                         <a href="{% url 'dog edit' dog.pk %}" class="btn btn-primary">Edit</a>
                         <a href="{% url 'dog delete' dog.pk %}" class="btn btn-primary">Delete</a>
-                        <a href="{% url 'dog missing report' dog.pk %}" class="btn btn-primary">Report Missing!</a>
                     {% endif %}
                 </div>
             </div>

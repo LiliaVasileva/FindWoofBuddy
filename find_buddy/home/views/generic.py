@@ -1,4 +1,5 @@
 from django.contrib.auth import login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
@@ -41,6 +42,7 @@ class UserRegistrationView(CreateView):
     # to login when register
     def form_valid(self, form):
         result = super().form_valid(form)
+
         login(self.request, self.object)
         return result
 
@@ -57,11 +59,13 @@ def error_404(request):
     return render(request, 'page-404.html')
 
 
-class ProfileHomeListView(ListView):
+class ProfileHomeListView(LoginRequiredMixin,ListView):
     model = Dog
     template_name = 'home-page-with-profile.html'
     paginate_by = 2
     context_object_name = 'dogs'
     ordering = ['-if_lost']
+    login_url = 'profile login'
+    redirect_field_name = 'profile login'
 
 

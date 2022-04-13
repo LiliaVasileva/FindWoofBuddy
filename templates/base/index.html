@@ -36,6 +36,7 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'show profile' request.user.pk %}">Profile</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'owner dogs' %}">My Woofs!</a>
                     <li class="nav-item"><a class="nav-link" href="{% url 'dog create' %}">Add Woof!</a>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'dog missing report' %}">Report Missing!</a>
                     <li class="nav-item">
                         <a class="nav-link disabled">Hi, {{ request.user }}!</a>
                     </li>

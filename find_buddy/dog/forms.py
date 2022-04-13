@@ -1,5 +1,7 @@
 from django import forms
-from django.core.exceptions import NON_FIELD_ERRORS
+from django.contrib import messages
+from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
+from django.http import request
 
 from find_buddy.common.form_mixins import BootstrapFormMixin, DisabledFieldsFormMixin
 from find_buddy.dog.models import Dog, DogMissingReport
@@ -15,7 +17,6 @@ class DogCreateForm(BootstrapFormMixin, forms.ModelForm):
     def save(self, commit=True):
         dog = super().save(commit=False)
         dog.user = self.user
-
         if commit:
             dog.save()
         return dog
@@ -91,13 +92,16 @@ class DogDeleteForm(forms.ModelForm, DisabledFieldsFormMixin, BootstrapFormMixin
 
 
 class DogMissingReportForm(forms.ModelForm, BootstrapFormMixin):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args,user=None, **kwargs):
         super().__init__(*args, **kwargs)
         self._init_bootstrap_form_controls()
+        if user:
+            a = forms.ModelChoiceField(queryset=Dog.objects.filter(user=user))
+            self.fields['dog'] = forms.ModelChoiceField(queryset=Dog.objects.filter(user=user))
 
     class Meta:
         model = DogMissingReport
-        exclude= ['dog']
+        fields ='__all__'
         widgets = {
             'reported_address': forms.Textarea(
                 attrs={
@@ -118,15 +122,17 @@ class DogMissingReportForm(forms.ModelForm, BootstrapFormMixin):
                 }
             ),
         }
-    #
+
+
     # def save(self, commit=True):
-    #     user = super().save(commit=commit)
+    #     dog_missing_report = super().save(commit=commit)
     #     dog_missing_report = DogMissingReport(
     #         reported_address=self.cleaned_data['reported_address'],
     #         subject=self.cleaned_data['subject'],
     #         message=self.cleaned_data['message'],
-    #         dog=user.dog.pk,
+    #         dog_id=self.instance.pk
     #     )
+    #     a=5
     #     if commit:
     #         dog_missing_report.save()
-    #     return user
+    #     return dog_missing_report

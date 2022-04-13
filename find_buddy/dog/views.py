@@ -1,7 +1,9 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, DetailView
+from django.views.generic import TemplateView, CreateView, UpdateView, DetailView
 from geopy import Nominatim
 from geopy.distance import geodesic
 
@@ -11,8 +13,10 @@ from find_buddy.dog.models import Dog
 from find_buddy.settings import EMAIL_HOST_USER
 
 
-class DogsTemplateView(TemplateView):
+class DogsTemplateView(LoginRequiredMixin, TemplateView):
     template_name = 'dog/profile-dogs-page.html'
+    login_url = 'profile login'
+    redirect_field_name = 'profile login'
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -24,10 +28,12 @@ class DogsTemplateView(TemplateView):
         return context
 
 
-class DogDetailsView(DetailView):
+class DogDetailsView(LoginRequiredMixin, DetailView):
     model = Dog
     template_name = 'dog/dog-details-page.html'
     context_object_name = 'dog'
+    login_url = 'profile login'
+    redirect_field_name = 'profile login'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -37,9 +43,11 @@ class DogDetailsView(DetailView):
         return context
 
 
-class DogCreateView(CreateView):
+class DogCreateView(LoginRequiredMixin, CreateView):
     form_class = DogCreateForm
     template_name = 'dog/dog-create-page.html'
+    login_url = 'profile login'
+    redirect_field_name = 'profile login'
 
     def get_success_url(self):
         return reverse_lazy('owner dogs')
@@ -51,15 +59,18 @@ class DogCreateView(CreateView):
         return kwargs
 
 
-class DogEditView(UpdateView):
+class DogEditView(LoginRequiredMixin, UpdateView):
     model = Dog
     form_class = DogEditForm
     template_name = 'dog/dog-edit-page.html'
+    login_url = 'profile login'
+    redirect_field_name = 'profile login'
 
     def get_success_url(self):
         return reverse_lazy('owner dogs')
 
 
+@login_required(login_url='profile login')
 def dog_delete_view(request, pk):
     dog = Dog.objects.get(pk=pk)
     if request.method == 'POST':
@@ -76,14 +87,13 @@ def dog_delete_view(request, pk):
     return render(request, 'dog/dog-delete-page.html', context)
 
 
-# I need to add the missing report to be the dog!!
-
-def dog_missing_report(request, pk):
-    missing_dog = Dog.objects.get(pk=pk)
-    missing_dog.if_lost = True
-    missing_dog.save()
+@login_required(login_url='profile login')
+def dog_missing_report(request):
     if request.method == 'POST':
-        form = DogMissingReportForm(request.POST)
+        form = DogMissingReportForm(request.POST, user=request.user)
+        missing_dog = form.dog
+        missing_dog.if_lost = True
+        missing_dog.save()
         if form.is_valid():
             geolocator = Nominatim(user_agent='dog')
             reported_address_ = form.cleaned_data['reported_address']
@@ -108,7 +118,7 @@ def dog_missing_report(request, pk):
             form.save()
             return redirect('dashboard')
     else:
-        form = DogMissingReportForm()
+        form = DogMissingReportForm(user=request.user)
 
     context = {
         'form': form,

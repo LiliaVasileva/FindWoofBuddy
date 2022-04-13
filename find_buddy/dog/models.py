@@ -64,4 +64,11 @@ class DogMissingReport(models.Model):
         verbose_name='Message'
 
     )
+    dog = models.ForeignKey(
+        Dog,
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        return self.subject
 
