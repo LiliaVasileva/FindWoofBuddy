@@ -45,16 +45,18 @@ class ProfileDitailViewTests(TestCase):
         return user, profile
 
     def test_when_opening_not_existing_profile_expect_404(self):
-        response = self.client.get(reverse('show profile', kwargs={'pk': 7}))
+        response = self.client.get(reverse('show profile', kwargs={'pk': 35}))
         self.assertEqual(404, response.status_code)
 
     def test_when_all_valid_expect_correct_template(self):
-        user, profile = self.__create_valid_user_and_profile()
-
+        user = UserModel.objects.create(**self.VALID_USER_CREDENTIALS)
+        profile = Profile.objects.create(**self.VALID_PROFILE_DATA, user=user)
+        self.client.login(**self.VALID_USER_CREDENTIALS)
         response = self.client.get(reverse('show profile', kwargs={
             'pk': profile.pk
         }))
-        self.assertTemplateUsed(response, 'profile-details-page.html')
+        a=5
+        self.assertTemplateUsed(response.path, 'profile-details-page.html')
 
     def test_when_user_is_owner__expect_is_owner_tobe_true(self):
         user, profile = self.__create_valid_user_and_profile()

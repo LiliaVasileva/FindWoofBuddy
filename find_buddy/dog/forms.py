@@ -95,9 +95,9 @@ class DogMissingReportForm(forms.ModelForm, BootstrapFormMixin):
     def __init__(self, *args,user=None, **kwargs):
         super().__init__(*args, **kwargs)
         self._init_bootstrap_form_controls()
-        if user:
-            a = forms.ModelChoiceField(queryset=Dog.objects.filter(user=user))
-            self.fields['dog'] = forms.ModelChoiceField(queryset=Dog.objects.filter(user=user))
+        self.user =user
+        a=5
+        self.fields['dog'] = forms.ModelChoiceField(queryset=Dog.objects.filter(user=user))
 
     class Meta:
         model = DogMissingReport
@@ -122,17 +122,3 @@ class DogMissingReportForm(forms.ModelForm, BootstrapFormMixin):
                 }
             ),
         }
-
-
-    # def save(self, commit=True):
-    #     dog_missing_report = super().save(commit=commit)
-    #     dog_missing_report = DogMissingReport(
-    #         reported_address=self.cleaned_data['reported_address'],
-    #         subject=self.cleaned_data['subject'],
-    #         message=self.cleaned_data['message'],
-    #         dog_id=self.instance.pk
-    #     )
-    #     a=5
-    #     if commit:
-    #         dog_missing_report.save()
-    #     return dog_missing_report

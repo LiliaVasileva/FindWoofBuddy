@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -91,15 +92,21 @@ def dog_delete_view(request, pk):
 def dog_missing_report(request):
     if request.method == 'POST':
         form = DogMissingReportForm(request.POST, user=request.user)
-        missing_dog = form.dog
+        # missing_dog = form.cleaned_data['dog']
+        missing_dog_pk = int(request.POST['dog'])
+        missing_dog = Dog.objects.get(pk=missing_dog_pk)
         missing_dog.if_lost = True
         missing_dog.save()
         if form.is_valid():
             geolocator = Nominatim(user_agent='dog')
             reported_address_ = form.cleaned_data['reported_address']
             reported_address = geolocator.geocode(reported_address_)
+            if not reported_address:
+                nav_bar = False
+                return redirect('invalid address')
             reported_address_lat = reported_address.latitude
             reported_address_long = reported_address.longitude
+
             point_a = (reported_address_lat, reported_address_long)
             recipient_list = []
 
@@ -125,3 +132,7 @@ def dog_missing_report(request):
     }
 
     return render(request, 'dog/dog-missing-report.html', context)
+
+
+def invalid_dog_address(request):
+    return render(request, 'dog/invalid-address.html')

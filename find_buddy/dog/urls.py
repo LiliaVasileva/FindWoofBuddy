@@ -1,7 +1,7 @@
 from django.urls import path
 
 from find_buddy.dog.views import DogsTemplateView, DogCreateView, DogEditView, dog_delete_view, DogDetailsView, \
-    dog_missing_report
+    dog_missing_report, invalid_dog_address
 
 urlpatterns = [
     path('details/', DogsTemplateView.as_view(), name='owner dogs'),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('delete/<int:pk>', dog_delete_view, name='dog delete'),
     path('details/<int:pk>', DogDetailsView.as_view(), name ='dog detail page'),
     path('missing/', dog_missing_report, name='dog missing report'),
+    path('invalid-adress/', invalid_dog_address, name='invalid address')
     ]
