@@ -218,7 +218,7 @@ class DogMissingReportTest(TestCase):
 
         self.assertEqual(request.status_code, 302)
 
-    def test_if_render_correct_template(self):
+    def test_if_render_and_return_correct_status_code(self):
         self.user.set_password('12345')
         self.user.save()
         self.client.login(email='testtestov@gmail.com', password='12345', )
