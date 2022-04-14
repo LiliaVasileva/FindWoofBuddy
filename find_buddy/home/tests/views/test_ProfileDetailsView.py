@@ -1,7 +1,7 @@
 from datetime import date
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import TestCase, RequestFactory, Client
 from django.urls import reverse
 
 from find_buddy.dog.models import Dog
@@ -11,85 +11,86 @@ UserModel = get_user_model()
 
 
 class ProfileDitailViewTests(TestCase):
-    VALID_USER_CREDENTIALS = {
-        'email': 'testtestov@gmail.com',
-        'password': 'tetstetste',
-    }
-    VALID_PROFILE_DATA = {
-        'first_name': 'Test',
-        'last_name': '1123QwER',
-        'picture': 'IMG_2022010_121818.jpg',
-        'birth_date': date(1991, 3, 5),
-    }
-    VALID_DOG_DATA = {
-        'name': 'Tom',
-        'address': 'Sofia, Lake Park',
-        'picture': 'IMG_20220090_121818.jpg',
-        'description': 'Some Text Here',
-        'if_lost': 'False',
-    }
-    VALID_DOG_DATA_2 = {
-        'name': 'Jerry',
-        'address': 'Varna, Bulgaria',
-        'picture': 'IMG_20220454090_121818.jpg',
-        'description': 'Some Text Here',
-        'if_lost': 'False',
-    }
+    def setUp(self):
+        self.factory = RequestFactory()
 
-    def __create_user(self, **credentials):
-        return UserModel.objects.create(**credentials)
-
-    def __create_valid_user_and_profile(self):
-        user = UserModel.objects.create(**self.VALID_USER_CREDENTIALS)
-        profile = Profile.objects.create(**self.VALID_PROFILE_DATA, user=user)
-        return user, profile
+        self.user = UserModel.objects.create(
+            email='testtestov@gmail.com',
+            password='tetstetste',
+        )
+        self.profile = Profile.objects.create(
+            first_name='Test',
+            last_name='Testov',
+            picture='IMG_2022010_121818.jpg',
+            birth_date=date(1991, 4, 6),
+            user=self.user,
+        )
+        self.dog = Dog.objects.create(
+            name='Billy',
+            address='Varna, Sea Garden',
+            picture='IMG_2022d86583010_121818.jpg',
+            description='Some Text Here',
+            if_lost=False,
+            user=self.user
+        )
+        self.client = Client()
 
     def test_when_opening_not_existing_profile_expect_404(self):
+        self.user.set_password('12345')
+        self.user.save()
+        self.client.login(email='testtestov@gmail.com', password='12345', )
         response = self.client.get(reverse('show profile', kwargs={'pk': 35}))
         self.assertEqual(404, response.status_code)
 
     def test_when_all_valid_expect_correct_template(self):
-        user = UserModel.objects.create(**self.VALID_USER_CREDENTIALS)
-        profile = Profile.objects.create(**self.VALID_PROFILE_DATA, user=user)
-        self.client.login(**self.VALID_USER_CREDENTIALS)
-        response = self.client.get(reverse('show profile', kwargs={
-            'pk': profile.pk
+        self.user.set_password('12345')
+        self.user.save()
+        self.client.login(email='testtestov@gmail.com', password='12345', )
+        request = self.client.get(reverse('show profile', kwargs={
+            'pk': self.profile.pk
         }))
-        a=5
-        self.assertTemplateUsed(response.path, 'profile-details-page.html')
+        self.assertEqual(request.template_name[0], 'profile-details-page.html')
 
     def test_when_user_is_owner__expect_is_owner_tobe_true(self):
-        user, profile = self.__create_valid_user_and_profile()
-        self.client.login(**self.VALID_USER_CREDENTIALS)
-        response = self.client.get(reverse('show profile', kwargs={'pk': profile.pk}))
-
+        self.user.set_password('12345')
+        self.user.save()
+        self.client.login(email='testtestov@gmail.com', password='12345', )
+        response = self.client.get(reverse('show profile', kwargs={'pk': self.profile.pk}))
         self.assertTrue(True, response.context['is_owner'])
 
     def test_when_user_is_not_owner__expect_is_owner_tobe_False(self):
-        user, profile = self.__create_valid_user_and_profile()
-        credentials = {
-            'email': 'test1@gmail.com',
-            'password': '1123QwER',
-        }
-        user2 = self.__create_user(**credentials)
+        self.user.set_password('12345')
+        self.user.save()
+        self.client.login(email='testtestov@gmail.com', password='12345', )
+        user2 = UserModel.objects.create(
+            email='testtestov2@gmail.com',
+            password='tetstetste2',
+        )
+        profile2 = Profile.objects.create(
+            first_name='Test2',
+            last_name='Testov2',
+            picture='IMG_202202210_121818.jpg',
+            birth_date=date(1991, 5, 6),
+            user= user2,
+        )
 
-        self.client.login(**credentials)
-        response = self.client.get(reverse('show profile', kwargs={'pk': profile.pk}))
-
+        response = self.client.get(reverse('show profile', kwargs={'pk': profile2.pk}))
         self.assertFalse(response.context['is_owner'])
 
     def test_when_user_has_dogs_shows_correct_dog(self):
-        user, profile = self.__create_valid_user_and_profile()
-        dog = Dog.objects.create(**self.VALID_DOG_DATA, user=user)
-        user_2 = UserModel.objects.create(**{'email': 'testov3@abv.bg', 'password': '1123QbBQw$E'})
-        dog_user_2 = Dog.objects.create(**self.VALID_DOG_DATA_2, user=user_2)
-        response = self.client.get(reverse('show profile', kwargs={'pk': profile.pk}))
+        self.user.set_password('12345')
+        self.user.save()
+        self.client.login(email='testtestov@gmail.com', password='12345', )
+        response = self.client.get(reverse('show profile', kwargs={'pk': self.profile.pk}))
 
-        self.assertEqual(str(dog), ''.join(response.context['dogs']))
+        self.assertEqual(str(self.dog),''.join(response.context['dogs']))
 
     def test_when_user_has_no_dogs_dogs_should_be_empty(self):
-        user, profile = self.__create_valid_user_and_profile()
-        response = self.client.get(reverse('show profile', kwargs={'pk': profile.pk}))
+        self.user.set_password('12345')
+        self.user.save()
+        self.client.login(email='testtestov@gmail.com', password='12345', )
+        self.dog.delete()
+        response = self.client.get(reverse('show profile', kwargs={'pk': self.profile.pk}))
         self.assertEqual('',response.context['dogs'])
 
 

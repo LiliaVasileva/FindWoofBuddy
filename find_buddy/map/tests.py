@@ -38,7 +38,7 @@ class ShowMapViewTest(TestCase):
         self.user.save()
         self.client.login(email='testtestov@gmail.com', password='12345', )
         request = self.client.get(reverse('map'))
-        self.assertEqual(request.status_code, 200)
+        self.assertEqual(200,request.status_code)
 
     def test_if_redirect_to_404_if_address_is_not_valid(self):
         self.user.set_password('12345')
@@ -50,7 +50,7 @@ class ShowMapViewTest(TestCase):
                                    }
                                    )
 
-        self.assertEqual(request.status_code, 302)
+        self.assertEqual(302,request.status_code)
 
     def test_if_return_status_code_200_if_address_is_valid(self):
         self.user.set_password('12345')
@@ -63,4 +63,4 @@ class ShowMapViewTest(TestCase):
                                    )
 
         # when the address is valid it redirects to map view
-        self.assertEqual(request.status_code, 302)
+        self.assertEqual(302, request.status_code)

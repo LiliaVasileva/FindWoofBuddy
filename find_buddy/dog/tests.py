@@ -42,19 +42,19 @@ class DogsTemplateViewTest(TestCase):
         request.user = self.user
         response = DogsTemplateView.as_view()(request)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.template_name[0], 'dog/profile-dogs-page.html')
+        self.assertEqual('dog/profile-dogs-page.html',response.template_name[0])
 
     def test_if_redirect_to_login_if_user_not_authenticated(self):
         request = self.factory.get('dog/details//')
         request.user = AnonymousUser()
         response = DogsTemplateView.as_view()(request)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(302,response.status_code)
 
     def test_if_return_correct_context_data(self):
         request = self.factory.get('dog/details//')
         request.user = self.user
         response = DogsTemplateView.as_view()(request)
-        self.assertEqual(response.context_data['dogs'][0], self.dog)
+        self.assertEqual(self.dog,response.context_data['dogs'][0])
 
 
 class DogDetailsViewTest(TestCase):
@@ -87,21 +87,21 @@ class DogDetailsViewTest(TestCase):
         self.client.login(email='testtestov@gmail.com', password='12345', )
         request = self.client.get(reverse('dog detail page', kwargs={'pk': self.dog.pk}))
         self.assertEqual(request.status_code, 200)
-        self.assertEqual(request.template_name[0], 'dog/dog-details-page.html')
+        self.assertEqual('dog/dog-details-page.html',request.template_name[0])
 
     def test_if_user_is_equal_to_request_user(self):
         self.user.set_password('12345')
         self.user.save()
         self.client.login(email='testtestov@gmail.com', password='12345', )
         request = self.client.get(reverse('dog detail page', kwargs={'pk': self.dog.pk}))
-        self.assertEqual(request.wsgi_request.user, self.user)
+        self.assertEqual(self.user,request.wsgi_request.user)
 
     def test_if_returns_correct_context_data(self):
         self.user.set_password('12345')
         self.user.save()
         self.client.login(email='testtestov@gmail.com', password='12345', )
         request = self.client.get(reverse('dog detail page', kwargs={'pk': self.dog.pk}))
-        self.assertTrue(request.context_data['is_owner'], True)
+        self.assertTrue(True,request.context_data['is_owner'])
 
 
 class DogEditViewTest(TestCase):
@@ -134,7 +134,7 @@ class DogEditViewTest(TestCase):
         self.client.login(email='testtestov@gmail.com', password='12345', )
         request = self.client.get(reverse('dog edit', kwargs={'pk': self.dog.pk}))
         self.assertEqual(request.status_code, 200)
-        self.assertEqual(request.template_name[0], 'dog/dog-edit-page.html')
+        self.assertEqual('dog/dog-edit-page.html',request.template_name[0])
 
     def test_when_editing_get_correct_update(self):
         self.user.set_password('12345')
@@ -152,7 +152,7 @@ class DogEditViewTest(TestCase):
                                    )
 
         updated_dog = Dog.objects.get(pk=self.dog.pk)
-        self.assertEqual(updated_dog.name, 'Tom')
+        self.assertEqual('Tom',updated_dog.name)
 
     def test_when_edit_is_successful_redirect_correct(self):
         self.user.set_password('12345')
@@ -170,7 +170,7 @@ class DogEditViewTest(TestCase):
                                    )
 
         updated_dog = Dog.objects.get(pk=self.dog.pk)
-        self.assertEqual(request.status_code, 302)
+        self.assertEqual(302,request.status_code)
 
 
 class DogMissingReportTest(TestCase):
@@ -216,11 +216,11 @@ class DogMissingReportTest(TestCase):
                                    }
                                    )
 
-        self.assertEqual(request.status_code, 302)
+        self.assertEqual(302,request.status_code)
 
     def test_if_render_and_return_correct_status_code(self):
         self.user.set_password('12345')
         self.user.save()
         self.client.login(email='testtestov@gmail.com', password='12345', )
         request = self.client.get(reverse('dog missing report'))
-        self.assertEqual(request.status_code, 200)
+        self.assertEqual(200,request.status_code)
