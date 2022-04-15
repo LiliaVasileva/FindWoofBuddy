@@ -71,7 +71,7 @@ class ProfileDitailViewTests(TestCase):
             last_name='Testov2',
             picture='IMG_202202210_121818.jpg',
             birth_date=date(1991, 5, 6),
-            user= user2,
+            user=user2,
         )
 
         response = self.client.get(reverse('show profile', kwargs={'pk': profile2.pk}))
@@ -83,7 +83,7 @@ class ProfileDitailViewTests(TestCase):
         self.client.login(email='testtestov@gmail.com', password='12345', )
         response = self.client.get(reverse('show profile', kwargs={'pk': self.profile.pk}))
 
-        self.assertEqual(str(self.dog),''.join(response.context['dogs']))
+        self.assertEqual(str(self.dog), ''.join(response.context['dogs']))
 
     def test_when_user_has_no_dogs_dogs_should_be_empty(self):
         self.user.set_password('12345')
@@ -91,6 +91,4 @@ class ProfileDitailViewTests(TestCase):
         self.client.login(email='testtestov@gmail.com', password='12345', )
         self.dog.delete()
         response = self.client.get(reverse('show profile', kwargs={'pk': self.profile.pk}))
-        self.assertEqual('',response.context['dogs'])
-
-
+        self.assertEqual('', response.context['dogs'])

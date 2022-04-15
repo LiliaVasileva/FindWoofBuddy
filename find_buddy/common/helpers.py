@@ -2,8 +2,6 @@ import folium
 from geocoder import location
 
 from find_buddy.dog.models import Dog
-from find_buddy.home.models import Profile
-from find_buddy.map.models import Search
 
 
 def def_my_map():

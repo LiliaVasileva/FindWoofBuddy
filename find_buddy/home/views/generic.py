@@ -3,13 +3,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
-from django.views.defaults import page_not_found
+
 from django.views.generic import CreateView, TemplateView, ListView
 
 from find_buddy.common.helpers import def_my_map
 from find_buddy.dog.models import Dog
 from find_buddy.home.forms import UserRegistrationForm
-from find_buddy.home.models import Profile
 
 
 class HomeTemplateView(TemplateView):
@@ -59,7 +58,7 @@ def error_404(request):
     return render(request, 'page-404.html')
 
 
-class ProfileHomeListView(LoginRequiredMixin,ListView):
+class ProfileHomeListView(LoginRequiredMixin, ListView):
     model = Dog
     template_name = 'home-page-with-profile.html'
     paginate_by = 2
@@ -67,5 +66,3 @@ class ProfileHomeListView(LoginRequiredMixin,ListView):
     ordering = ['-if_lost']
     login_url = 'profile login'
     redirect_field_name = 'profile login'
-
-
