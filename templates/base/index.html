@@ -33,7 +33,8 @@
                 <ul class="navbar-nav ms-auto my-2 my-lg-0">
                     <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url "map" %}">Woof's Map!</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'show profile' request.user.pk %}">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'show profile' request.user.pk %}">Profile</a>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'owner dogs' %}">My Woofs!</a>
                     <li class="nav-item"><a class="nav-link" href="{% url 'dog create' %}">Add Woof!</a>
                     <li class="nav-item"><a class="nav-link" href="{% url 'dog missing report' %}">Report Missing!</a>
@@ -81,6 +82,9 @@
     <div class="container px-4 px-lg-5">
         <div class="small text-center text-muted">Lilia Vasileva's Project Defence at Software University Sofia,
             Bulgaria
+        </div>
+        <div class="small text-center text-muted"> Project theme downloaded from
+            https://startbootstrap.com/theme/creative/
         </div>
     </div>
 </footer>

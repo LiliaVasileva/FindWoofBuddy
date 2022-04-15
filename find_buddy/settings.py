@@ -1,13 +1,17 @@
 import os
 from pathlib import Path
+
+import cloudinary
 import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-$buw$)u$ps*uw=8n5=%dwc2)b&!qkx(^w$9_q33fu2j7r!fnke'
+SECRET_KEY = os.getenv('SECRET_KEY', '')
 
-DEBUG = True
-APP_ENVIRONMENT = os.getenv('APP_ENVIRONMENT')
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
+
+
+APP_ENVIRONMENT = os.getenv('APP_ENVIRONMENT', '')
 
 # ALLOWED_HOSTS = os.getenv('ALLOWED_HOST').split(' ')
 
@@ -71,10 +75,10 @@ AUTH_USER_MODEL = 'home.FindBuddyUser'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd5vfkdrikaa79b',
-        'USER': 'hbbkbjoijjpmxe',
-        'PASSWORD': '6522022e3ec6f11c59b5f1639719a5d24e535aecdd8e837f349966abd3019800',
-        'HOST': 'ec2-52-48-159-67.eu-west-1.compute.amazonaws.com',
+        'NAME': os.getenv('DB_NAME', 'find_buddy_db'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', '1123QwER'),
+        'HOST': os.getenv('DB_HOST', '127.0.0.1'),
         'PORT': '5432',
     }
 }
@@ -130,3 +134,9 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 SERVER_EMAIL = os.getenv('SERVER_EMAIL')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+
+cloudinary.config(
+  cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME', None),
+  api_key = os.getenv('CLOUDINARY_API_KEY', None),
+  api_secret = os.getenv('CLOUDINARY_API_SECRET', None)
+)
