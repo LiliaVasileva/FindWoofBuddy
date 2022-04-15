@@ -1,2 +1,2 @@
 web: gunicorn --pythonpath find_buddy.wsgi
-release: python find_buddy/manage.py migrate
+release: python manage.py migrate
