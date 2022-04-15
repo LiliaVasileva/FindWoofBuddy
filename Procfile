@@ -1,1 +1,1 @@
-web: gunicorn find_buddy find_buddy.wsgi
+web: gunicorn find_buddy.wsgi
