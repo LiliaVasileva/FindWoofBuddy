@@ -4,7 +4,7 @@ import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'django-insecure-$buw$)u$ps*uw=8n5=%dwc2)b&!qkx(^w$9_q33fu2j7r!fnke'
 
 DEBUG = True
 APP_ENVIRONMENT = os.getenv('APP_ENVIRONMENT')
