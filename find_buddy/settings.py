@@ -71,10 +71,10 @@ AUTH_USER_MODEL = 'home.FindBuddyUser'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'find_buddy_db',
-        'USER': 'postgres',
-        'PASSWORD': '1123QwER',
-        'HOST': '127.0.0.1',
+        'NAME': 'd5vfkdrikaa79b',
+        'USER': 'hbbkbjoijjpmxe',
+        'PASSWORD': '6522022e3ec6f11c59b5f1639719a5d24e535aecdd8e837f349966abd3019800',
+        'HOST': 'ec2-52-48-159-67.eu-west-1.compute.amazonaws.com',
         'PORT': '5432',
     }
 }
