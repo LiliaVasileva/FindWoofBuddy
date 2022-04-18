@@ -10,7 +10,7 @@ from find_buddy.home.models import Profile
 UserModel = get_user_model()
 
 
-class UserRegistrationForm(UserCreationForm,BootstrapFormMixin):
+class UserRegistrationForm(UserCreationForm, BootstrapFormMixin):
     first_name = forms.CharField(
         max_length=30,
     )
@@ -43,7 +43,6 @@ class UserRegistrationForm(UserCreationForm,BootstrapFormMixin):
         return user
 
 
-
 # Create ModelForm based on the Group model.
 class GroupAdminForm(forms.ModelForm):
     class Meta:
@@ -52,10 +51,10 @@ class GroupAdminForm(forms.ModelForm):
 
     # Add the users field.
     users = forms.ModelMultipleChoiceField(
-         queryset=UserModel.objects.all(),
-         required=False,
-         # Use the pretty 'filter_horizontal widget'.
-         widget=FilteredSelectMultiple('users', False)
+        queryset=UserModel.objects.all(),
+        required=False,
+        # Use the pretty 'filter_horizontal widget'.
+        widget=FilteredSelectMultiple('users', False)
     )
 
     def __init__(self, *args, **kwargs):
