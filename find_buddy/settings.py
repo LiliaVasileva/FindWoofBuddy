@@ -79,10 +79,9 @@ DATABASES = {
         'USER': os.getenv('DB_USER', 'postgres'),
         'PASSWORD': os.getenv('DB_PASSWORD', '1123QwER'),
         'HOST': os.getenv('DB_HOST', '127.0.0.1'),
-        'PORT': '5432',
+        'PORT': '5433',
     }
 }
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
